@@ -41,3 +41,14 @@ Content-Type: application/json
     "6)Повторяйте, пока творог не закончится."
   ]
 }
+###
+POST localhost:8080/ingredient
+Content-Type: application/json
+
+{
+  "title": "cheese",
+  "number": 3,
+  "measureUnit": "kg"
+}
+###
+GET localhost:8080/ingredient/1

@@ -9,11 +9,11 @@ import java.util.Map;
 
 @Service
 public class RecipeService {
-    private int idcounter = 0;
+    private int idCounter = 0;
     private final Map<Integer, Recipe> recipes = new HashMap<>();
 
     public RecipeDTO addRecipe(Recipe recipe) {
-        int id = idcounter++;
+        int id = idCounter++;
         recipes.put(id, recipe);
         return RecipeDTO.from(id, recipe);
     }

@@ -1,9 +1,12 @@
 package pro.sky.recipesapplication.model;
 
+import java.util.List;
+
 public class Ingredient {
     private String title;
     private int number;
     private String measureUnit;
+    private List<Ingredient> ingredients;
 
     public Ingredient(String title, int number, String measureUnit) {
         this.title = title;
