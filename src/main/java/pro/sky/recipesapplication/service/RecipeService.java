@@ -2,6 +2,7 @@ package pro.sky.recipesapplication.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapplication.dto.RecipeDTO;
+import pro.sky.recipesapplication.model.Ingredient;
 import pro.sky.recipesapplication.model.Recipe;
 
 import java.util.HashMap;
@@ -23,5 +24,24 @@ public class RecipeService {
             return RecipeDTO.from(id, recipe);
         }
         return null;
+    }
+    public Recipe editRecipe(int id, Recipe recipe) {
+        if (recipes.containsKey(id)) {
+            recipes.put(id, recipe);
+            return recipe;
+        }
+        return null;
+    }
+
+    public boolean deleteIngredient(int id) {
+        if (recipes.containsKey(id)) {
+            recipes.remove(id);
+            return true;
+        }
+        return false;
+    }
+
+    public Map<Integer, Recipe> getAllIngredients() {
+        return recipes;
     }
 }

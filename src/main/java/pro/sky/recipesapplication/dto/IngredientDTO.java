@@ -15,7 +15,7 @@ public class IngredientDTO {
         this.measureUnit = measureUnit;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

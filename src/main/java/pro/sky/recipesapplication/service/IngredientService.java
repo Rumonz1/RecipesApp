@@ -25,4 +25,24 @@ public class IngredientService {
         }
         return null;
     }
+
+    public Ingredient editIngredient(int id, Ingredient ingredient) {
+        if (ingredients.containsKey(id)) {
+            ingredients.put(id, ingredient);
+            return ingredient;
+        }
+        return null;
+    }
+
+    public boolean deleteIngredient(int id) {
+        if (ingredients.containsKey(id)) {
+            ingredients.remove(id);
+            return true;
+        }
+return false;
+    }
+
+    public Map<Integer, Ingredient> getAllIngredients() {
+        return ingredients;
+    }
 }
