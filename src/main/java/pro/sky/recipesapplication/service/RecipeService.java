@@ -41,7 +41,7 @@ public class RecipeService {
         return false;
     }
 
-    public Map<Integer, Recipe> getAllIngredients() {
+    public Map<Integer, Recipe> getAllRecipes() {
         return recipes;
     }
 }
