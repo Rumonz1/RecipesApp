@@ -85,7 +85,7 @@ public class RecipeController {
             summary = "Удаление рецепта"
     )
     public ResponseEntity<Void> deleteRecipe(@PathVariable int id) {
-        if (recipeService.deleteIngredient(id)) {
+        if (recipeService.deleteRecipe(id)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

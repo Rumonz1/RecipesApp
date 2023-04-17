@@ -2,10 +2,9 @@ package pro.sky.recipesapplication.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapplication.dto.IngredientDTO;
-import pro.sky.recipesapplication.dto.RecipeDTO;
 import pro.sky.recipesapplication.model.Ingredient;
-import pro.sky.recipesapplication.model.Recipe;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +12,17 @@ import java.util.Map;
 public class IngredientService {
     private int idCounter = 0;
     private final Map<Integer, Ingredient> ingredients = new HashMap<>();
+    final private IngredientFileService ingredientFileService;
+
+    public IngredientService(IngredientFileService ingredientFileService) {
+        this.ingredientFileService = ingredientFileService;
+    }
+    @PostConstruct
+    private void init() {
+        ingredientFileService.readFromFile();
+
+    }
+
     public IngredientDTO addIngredient(Ingredient ingredient) {
         int id = idCounter++;
         ingredients.put(id, ingredient);
