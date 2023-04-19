@@ -22,6 +22,13 @@ public class IngredientService {
     public IngredientService(IngredientFileService ingredientFileService) {
         this.ingredientFileService = ingredientFileService;
     }
+    @PostConstruct
+    private void init() {
+        File file = ingredientFileService.getDataFile();
+        if (file.exists()) {
+            ingredientFileService.readFromFile();
+        }
+    }
 
 
     public IngredientDTO addIngredient(Ingredient ingredient) {

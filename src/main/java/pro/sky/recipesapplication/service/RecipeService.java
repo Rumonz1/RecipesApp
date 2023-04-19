@@ -8,6 +8,7 @@ import pro.sky.recipesapplication.dto.RecipeDTO;
 import pro.sky.recipesapplication.model.Recipe;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,10 +24,9 @@ public class RecipeService {
 
     @PostConstruct
     private void init() {
-        try {
-            readFromFile();
-        } catch (Exception e) {
-            e.printStackTrace();
+        File file = recipeFileService.getDataFile();
+        if (file.exists()) {
+            recipeFileService.readFromFile();
         }
     }
 

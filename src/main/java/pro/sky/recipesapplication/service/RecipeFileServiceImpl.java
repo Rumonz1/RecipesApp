@@ -12,23 +12,11 @@ import java.nio.file.Path;
 
 @Service
 public class RecipeFileServiceImpl  implements RecipeFileService{
-    final private RecipeFileService recipeFileService;
     @Value("${path.to.data.file}")
     private String recipesFilePath;
     @Value("${name.of.recipes.file}")
     private String recipesFileName;
 
-    public RecipeFileServiceImpl(RecipeFileService recipeFileService) {
-        this.recipeFileService = recipeFileService;
-    }
-    @PostConstruct
-    private void init() {
-        try {
-            readFromFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
     @Override

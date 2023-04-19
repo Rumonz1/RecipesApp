@@ -19,41 +19,6 @@ public class IngredientFileServiceImpl implements IngredientFileService{
     private String ingredientFileName;
 
 
-    @PostConstruct
-    private void init() {
-        try {
-            readFromFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Override
-    public String addIngredient(Ingredient ingredient) {
-        return null;
-    }
-
-    @Override
-    public Ingredient getIngredient(int id) {
-        return null;
-    }
-
-    @Override
-    public Ingredient editIngredient(int id, Ingredient ingredient) {
-        return null;
-    }
-
-    @Override
-    public String removeIngredient(int id) {
-        return null;
-    }
-
-    @Override
-    public Map<Integer, Ingredient> getAllIngredients() {
-        return null;
-    }
-
     @Override
     public boolean saveToFile(String json) {
         try {
