@@ -23,7 +23,11 @@ public class RecipeService {
 
     @PostConstruct
     private void init() {
-        readFromFile();
+        try {
+            readFromFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public RecipeDTO addRecipe(Recipe recipe) {

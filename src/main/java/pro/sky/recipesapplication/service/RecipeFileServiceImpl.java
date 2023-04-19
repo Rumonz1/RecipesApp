@@ -4,6 +4,7 @@ package pro.sky.recipesapplication.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,10 +12,24 @@ import java.nio.file.Path;
 
 @Service
 public class RecipeFileServiceImpl  implements RecipeFileService{
+    final private RecipeFileService recipeFileService;
     @Value("${path.to.data.file}")
     private String recipesFilePath;
     @Value("${name.of.recipes.file}")
     private String recipesFileName;
+
+    public RecipeFileServiceImpl(RecipeFileService recipeFileService) {
+        this.recipeFileService = recipeFileService;
+    }
+    @PostConstruct
+    private void init() {
+        try {
+            readFromFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public boolean saveToFile(String json) {
@@ -34,7 +49,7 @@ public class RecipeFileServiceImpl  implements RecipeFileService{
             return Files.readString(Path.of(recipesFilePath, recipesFileName));
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            return "{ERROR}";
         }
     }
     @Override
@@ -49,6 +64,7 @@ public class RecipeFileServiceImpl  implements RecipeFileService{
             return false;
         }
     }
+
     @Override
     public File getDataFile() {
         return new File(recipesFilePath + "/" + recipesFileName);

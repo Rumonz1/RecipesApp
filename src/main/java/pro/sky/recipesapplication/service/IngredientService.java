@@ -1,27 +1,28 @@
 package pro.sky.recipesapplication.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapplication.dto.IngredientDTO;
 import pro.sky.recipesapplication.model.Ingredient;
+import pro.sky.recipesapplication.model.Recipe;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class IngredientService {
     private int idCounter = 0;
-    private final Map<Integer, Ingredient> ingredients = new HashMap<>();
+    private  Map<Integer, Ingredient> ingredients = new HashMap<>();
     final private IngredientFileService ingredientFileService;
 
     public IngredientService(IngredientFileService ingredientFileService) {
         this.ingredientFileService = ingredientFileService;
     }
-    @PostConstruct
-    private void init() {
-        ingredientFileService.readFromFile();
 
-    }
 
     public IngredientDTO addIngredient(Ingredient ingredient) {
         int id = idCounter++;
@@ -54,5 +55,15 @@ return false;
 
     public Map<Integer, Ingredient> getAllIngredients() {
         return ingredients;
+    }
+    private void readFromFile() {
+        try {
+            String json = ingredientFileService.readFromFile()  ;
+            ingredients = new ObjectMapper().readValue(json, new TypeReference<HashMap<Integer, Ingredient>>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }

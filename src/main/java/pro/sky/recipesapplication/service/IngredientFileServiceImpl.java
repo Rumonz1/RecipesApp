@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pro.sky.recipesapplication.model.Ingredient;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +17,17 @@ public class IngredientFileServiceImpl implements IngredientFileService{
     private String ingredientFilePath;
     @Value("${name.of.ingredients.file}")
     private String ingredientFileName;
+
+
+    @PostConstruct
+    private void init() {
+        try {
+            readFromFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public String addIngredient(Ingredient ingredient) {
@@ -57,16 +69,16 @@ public class IngredientFileServiceImpl implements IngredientFileService{
     @Override
     public String readFromFile() {
         try {
-            return Files.readString(Path.of(ingredientFilePath, ingredientFileName));
+            return Files.readString(Path.of(ingredientFilePath,ingredientFileName));
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            return "{ERROR}";
         }
     }
     @Override
     public boolean cleanDataFile() {
         try {
-            Path path = Path.of(ingredientFilePath, ingredientFileName);
+            Path path = Path.of(ingredientFilePath,ingredientFileName);
             Files.deleteIfExists(path);
             Files.createFile(path);
             return true;
@@ -75,6 +87,7 @@ public class IngredientFileServiceImpl implements IngredientFileService{
             return false;
         }
     }
+
     @Override
     public File getDataFile() {
         return new File(ingredientFilePath + "/" + ingredientFileName);
