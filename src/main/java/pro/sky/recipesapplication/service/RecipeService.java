@@ -33,6 +33,7 @@ public class RecipeService {
     public RecipeDTO addRecipe(Recipe recipe) {
         int id = idCounter++;
         recipes.put(id, recipe);
+        saveToFile();
         return RecipeDTO.from(id, recipe);
     }
     public RecipeDTO getRecipe(int id) {
@@ -45,6 +46,7 @@ public class RecipeService {
     public Recipe editRecipe(int id, Recipe recipe) {
         if (recipes.containsKey(id)) {
             recipes.put(id, recipe);
+            saveToFile();
             return recipe;
         }
         return null;

@@ -34,6 +34,7 @@ public class IngredientService {
     public IngredientDTO addIngredient(Ingredient ingredient) {
         int id = idCounter++;
         ingredients.put(id, ingredient);
+        saveToFile();
         return IngredientDTO.from(id, ingredient);
     }
     public IngredientDTO getIngredient(int id) {
@@ -47,6 +48,7 @@ public class IngredientService {
     public Ingredient editIngredient(int id, Ingredient ingredient) {
         if (ingredients.containsKey(id)) {
             ingredients.put(id, ingredient);
+            saveToFile();
             return ingredient;
         }
         return null;
@@ -62,6 +64,15 @@ return false;
 
     public Map<Integer, Ingredient> getAllIngredients() {
         return ingredients;
+    }
+    private void saveToFile() {
+        try {
+            String json = new ObjectMapper().writeValueAsString(ingredients);
+            ingredientFileService.saveToFile(json);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
     private void readFromFile() {
         try {
