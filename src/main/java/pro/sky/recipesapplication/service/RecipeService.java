@@ -24,10 +24,7 @@ public class RecipeService {
 
     @PostConstruct
     private void init() {
-        File file = recipeFileService.getDataFile();
-        if (file.exists()) {
-            recipeFileService.readFromFile();
-        }
+        recipeFileService.readFromFile();
     }
 
     public RecipeDTO addRecipe(Recipe recipe) {

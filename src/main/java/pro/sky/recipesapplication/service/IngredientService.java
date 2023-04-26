@@ -24,10 +24,7 @@ public class IngredientService {
     }
     @PostConstruct
     private void init() {
-        File file = ingredientFileService.getDataFile();
-        if (file.exists()) {
-            ingredientFileService.readFromFile();
-        }
+       ingredientFileService.readFromFile();
     }
 
 
