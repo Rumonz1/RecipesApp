@@ -9,8 +9,13 @@ import pro.sky.recipesapplication.model.Recipe;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.IOException;
 
 @Service
 public class RecipeService {
@@ -70,7 +75,6 @@ public class RecipeService {
         }
 
     }
-
     private void readFromFile() {
         try {
             String json = recipeFileService.readFromFile();
@@ -81,5 +85,34 @@ public class RecipeService {
         }
 
     }
+    public Path createTextRecipesFile() throws IOException {
+        Path path = recipeFileService.createTempFile("recipesTextFile");
+        for (Recipe recipe : recipes.values()) {
+            try (Writer writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+                writer.append(recipe.getTitle()).append("\n \n").append("Время приготовления: ").append(String.valueOf(recipe.getCookingTime())).append(" минут.").append("\n");
+                writer.append("\n");
+                writer.append("Ингредиенты: \n \n");
+                recipe.getIngredients().forEach(ingredient -> {
+                    try {
+                        writer.append(" - ").append(ingredient.getTitle()).append(" - ").append(String.valueOf(ingredient.getNumber())).append(" ").append(ingredient.getMeasureUnit()).append("\n \n");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                writer.append("\n");
+                writer.append("Инструкция приготовления: \n \n");
+                recipe.getSteps().forEach(step -> {
+                    try {
+                        writer.append(" > ").append(step).append("\n \n");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                writer.append("\n \n");
+            }
+        }
+        return path;
+    }
+
 }
 

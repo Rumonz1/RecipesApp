@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.recipesapplication.dto.IngredientDTO;
@@ -15,6 +18,10 @@ import pro.sky.recipesapplication.model.Ingredient;
 import pro.sky.recipesapplication.model.Recipe;
 import pro.sky.recipesapplication.service.RecipeService;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 @RestController
@@ -89,5 +96,42 @@ public class RecipeController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
+    }
+    @GetMapping("/export/text")
+    @Operation(
+            summary = "Загрузка текстового файла с рецептами",
+            description = "Создание и скачивание файла"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Файл сформирован и загружен"),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Ошибка в параметрах запроса"),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "URL неверный или действие не предусмотрено в веб-приложении"),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = " Во время выполнения запроса произошла ошибка на сервере"),
+    })
+
+    public ResponseEntity<Object> downloadTextDataFile() {
+        try {
+            Path path = recipeService.createTextRecipesFile();
+            if (Files.size(path) == 0) {
+                return ResponseEntity.noContent().build();
+            }
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(path.toFile()));
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .contentLength(Files.size(path))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"recipesDataFile.txt\"")
+                    .body(resource);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(e.toString());
+        }
     }
 }

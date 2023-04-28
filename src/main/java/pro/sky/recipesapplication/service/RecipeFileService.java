@@ -13,4 +13,5 @@ public interface RecipeFileService {
     boolean cleanDataFile();
 
     File getDataFile();
+    Path createTempFile(String suffix);
 }
